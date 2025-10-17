@@ -39,4 +39,3 @@ def parlay_preview(p1, p2, kind="same_game_cross_market"):
     proj = 100.0 * (q1 * q2) * (1.0 - pen)
     synergy = round(((p1 + p2)/2.0) * (1.0 - pen))
     return round(proj, 1), max(0, min(100, synergy))
-
