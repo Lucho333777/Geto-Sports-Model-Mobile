@@ -1,75 +1,48 @@
 import streamlit as st
-from utils import avg, to_num, clamp01, tier_label, parlay_preview
 
 st.set_page_config(page_title="GETO Goals (Mobile)", page_icon="⚽", layout="centered")
 
-# ===== Mobile-first CSS + keypad enforcement (no JS fetches) =====
+# === Style + keypad forcing ===
 st.markdown("""
 <style>
 :root {
-  --bg:#0b1220;
-  --card:#111827;
-  --ink:#f8fafc;
-  --muted:#9ca3af;
-  --border:#1e293b;
-  --grad:linear-gradient(90deg,#38bdf8,#22d3ee);
+  --bg:#0b1220; --card:#111827; --ink:#f8fafc; --muted:#9ca3af;
+  --border:#1e293b; --grad:linear-gradient(90deg,#38bdf8,#22d3ee);
 }
 [data-testid="stAppViewContainer"]{background:var(--bg);}
 *{font-family:Inter, system-ui; color:var(--ink);}
-h1,h2,h3{font-weight:800; color:var(--ink);}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:16px;
-  box-shadow:0 4px 12px rgba(0,0,0,.35);
+h1,h2{font-weight:800; text-align:center;}
+section{margin:12px 0;}
+label{display:block; font-weight:600; margin-top:6px;}
+input{
+  width:100%; background:var(--card); border:1px solid var(--border);
+  color:var(--ink); border-radius:12px; padding:10px 12px;
+  font-size:18px; text-align:center; margin-bottom:6px;
 }
-.stTextInput input{
-  background:var(--card)!important;
-  border:1px solid var(--border)!important;
-  border-radius:14px;
-  height:52px;
-  font-size:17px;
-  text-align:center;
-  color:var(--ink)!important;
+button{
+  width:100%; height:56px; border:none; border-radius:14px;
+  background:var(--grad); color:#0b1220; font-weight:900; font-size:18px;
+  margin-top:10px;
 }
-input[type="text"]::placeholder{color:var(--muted);}
-.btn-primary button{
-  width:100%;
-  height:56px;
-  border-radius:16px;
-  border:none;
-  background:var(--grad);
-  color:#0b1220;
-  font-weight:900;
-  font-size:18px;
-  box-shadow:0 2px 8px rgba(34,211,238,.45);
-}
-.badge{
-  font-size:13px;
-  color:var(--muted);
-  border:1px solid var(--border);
-  padding:3px 8px;
-  border-radius:10px;
-}
-.output{display:flex; flex-direction:column; gap:12px;}
+.card{background:var(--card); padding:14px; border-radius:14px; margin-top:10px;}
 </style>
 
-<script>
-window.addEventListener('load', () => {
-  const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
-  inputs.forEach((el,i) => {
-    el.setAttribute('inputmode','decimal');
-    el.setAttribute('pattern','[0-9]*');
-    el.setAttribute('type','number');
-    el.setAttribute('step','any');
-    el.setAttribute('autocomplete','off');
-  });
-  // Auto-focus the first input field if empty (opens keypad)
-  const firstEmpty = Array.from(inputs).find(i => !i.value);
-  if(firstEmpty){ firstEmpty.focus(); }
-});
-</script>
+<h1>⚽ GETO Goals — Mobile</h1>
+<p style='text-align:center;color:var(--muted);'>Numeric keypad version — optimized for phones.</p>
+
+<form id='goalsForm'>
+<section>
+  <label>Home Over 1.5 %</label>
+  <input type='number' step='any' inputmode='decimal' pattern='[0-9]*' name='h15'>
+  <label>Away Over 1.5 %</label>
+  <input type='number' step='any' inputmode='decimal' pattern='[0-9]*' name='a15'>
+  <label>Home Over 2.5 %</label>
+  <input type='number' step='any' inputmode='decimal' pattern='[0-9]*' name='h25'>
+  <label>Away Over 2.5 %</label>
+  <input type='number' step='any' inputmode='decimal' pattern='[0-9]*' name='a25'>
+</section>
+<button type='button' onclick='window.alert("This triggers your Python model next.")'>🔮 Run Model</button>
+</form>
 """, unsafe_allow_html=True)
 
 # ===== Header =====
