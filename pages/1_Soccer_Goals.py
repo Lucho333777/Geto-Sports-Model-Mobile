@@ -6,23 +6,68 @@ st.set_page_config(page_title="GETO Goals (Mobile)", page_icon="⚽", layout="ce
 # ===== Mobile-first CSS + keypad enforcement (no JS fetches) =====
 st.markdown("""
 <style>
-:root { --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#93a3b8; --border:#1f2937; --grad:linear-gradient(90deg,#3b82f6,#60a5fa); }
+:root {
+  --bg:#0b1220;
+  --card:#111827;
+  --ink:#f8fafc;
+  --muted:#9ca3af;
+  --border:#1e293b;
+  --grad:linear-gradient(90deg,#38bdf8,#22d3ee);
+}
 [data-testid="stAppViewContainer"]{background:var(--bg);}
 *{font-family:Inter, system-ui; color:var(--ink);}
-h1,h2,h3{font-weight:800;}
-.card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.25);}
-.stTextInput input{background:var(--card) !important; border:1px solid var(--border) !important;
-  border-radius:12px; height:48px; font-size:16px; text-align:center; color:var(--ink) !important;}
-input[type="text"]::placeholder{color:#64748b;}
-.btn-primary button{width:100%; height:52px; border-radius:14px; border:none; background:var(--grad); color:white; font-weight:800; font-size:18px;}
-.badge{font-size:12px; color:var(--muted); border:1px solid var(--border); padding:3px 8px; border-radius:10px;}
-.output{display:flex; gap:10px; flex-direction:column;}
+h1,h2,h3{font-weight:800; color:var(--ink);}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+.stTextInput input{
+  background:var(--card)!important;
+  border:1px solid var(--border)!important;
+  border-radius:14px;
+  height:52px;
+  font-size:17px;
+  text-align:center;
+  color:var(--ink)!important;
+}
+input[type="text"]::placeholder{color:var(--muted);}
+.btn-primary button{
+  width:100%;
+  height:56px;
+  border-radius:16px;
+  border:none;
+  background:var(--grad);
+  color:#0b1220;
+  font-weight:900;
+  font-size:18px;
+  box-shadow:0 2px 8px rgba(34,211,238,.45);
+}
+.badge{
+  font-size:13px;
+  color:var(--muted);
+  border:1px solid var(--border);
+  padding:3px 8px;
+  border-radius:10px;
+}
+.output{display:flex; flex-direction:column; gap:12px;}
 </style>
+
 <script>
 window.addEventListener('load', () => {
-  document.querySelectorAll('input[type="text"]').forEach(e => {
-    e.setAttribute('inputmode','decimal'); e.setAttribute('pattern','[0-9]*');
+  const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+  inputs.forEach((el,i) => {
+    el.setAttribute('inputmode','decimal');
+    el.setAttribute('pattern','[0-9]*');
+    el.setAttribute('type','number');
+    el.setAttribute('step','any');
+    el.setAttribute('autocomplete','off');
   });
+  // Auto-focus the first input field if empty (opens keypad)
+  const firstEmpty = Array.from(inputs).find(i => !i.value);
+  if(firstEmpty){ firstEmpty.focus(); }
 });
 </script>
 """, unsafe_allow_html=True)
